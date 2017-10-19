@@ -4,24 +4,22 @@ Steps used to identify, and determne the abundance of, mosaic fragments.
 
 2) Get an initial estimate of mosaic fragments usign the command `python SharedFragmentHist.py -l 500 -r putative_mosaic_fragments.txt <filtered_BLAST_output.txt>` (Step may be slow)
 
-3) Extract the nucleotide sequences corresponding to the putative mosaic fragments with the command `python extract_seqs.py -l 500 -o putative_mosaic_fragments.fna ncbi_plasmids.fna putative_mosaic_fragments.txt`
+3) Refine this initial estimate (iteratively combining highly overlapping regions) using the command `python mosaic_fragment_wrapper.py putative_mosaic_fragments.txt ../MosaicPlasmids/ncbi_plasmid.fna`
+	a) This step requires the scripts SharedFragmentHist.py, blast_filtering.py, and extract_seqs.py, to be present in the current working directory.
+	b) This step creates a number of intermediate files for each iteration in a subdirectory 'FragmentVersions/'. These files may be useful for debugging or for understanding the function of this step, but are not required for any subsequent analysis.
 
-4) Create a BLAST database from the putative mosaic fragment sequences with the command `makeblastdb -in putative_mosaic_fragments.fna -dbtype nucl -out putative_mosaic_fragments`
+4) Extract the finalized mosaic fragment nucleotide sequences with the command `python extract_seqs.py -l 500 -o final_mosaic_fragments.fna ../MosaicPlasmids/ncbi_plasmid.fna mosaic_fragments_final.txt`
 
-5) Run a self-self BLAST to identify highly overlapping regions with the command `blastn -query putative_mosaic_fragments.fna -db putative_mosaic_fragments -outfmt 6 -out double_check.txt -perc_identity 100`
+5) BLAST these regions against the initial plasmids with the command `blastn -query final_mosaic_fragments.fna -subject ../MosaicPlasmids/ncbi_plasmid.fna -outfmt 6 -out mosaic_fragment_abundance.txt -perc_identity 100`
 
-6) Combine overlapping regions with the command `python SharedFragmentHist.py -l 500 -e putative_mosaic_fragments.txt -k -r finialized_regions.txt double_check.txt`
+6) Filter the BLAST results for full length matches using the command `python blast_filtering.py -s final_mosaic_fragments.fna -c 100 mosaic_fragment_abundance.txt > mosaic_fragment_abundance_full_length.txt
 
-7) Extract these filialize mosaic fragment nucleotide sequences with the command `python extract_seqs.py -l 500 -o final_mosaic_fragments.fna finialized_regions.txt`
+7) Identify fragments with overlapping transposases with `python genes_touching_regions.py -n 'transposase' mosaic_fragments_final.txt ../MosaicPlasmids/ncbi_plasmid.gbff ../MosaicPlasmids/Transposase_filtered_table.txt Mosaic_fragment_transposases.tsv`
 
-8) BLAST these regions against the initial plasmids with the command `blastn -query final_mosaic_fragments.fna -subject ncbi_plasmids.fna -outfmt 6 -out mosaic_fragment_abundance.txt -perc_identity 100`
+8) Identify fragments with overlapping antibiotic resistance genes with `python genes_touching_regions.py -n 'antibiotic resistance' mosaic_fragments_final.txt ../MosaicPlasmids/ncbi_plasmid.gbff ../MosaicPlasmids/Resistance_filtered_table.txt Mosaic_fragment_resistance.tsv`
 
-9) Identify fragments with overlapping transposases with `python genes_touching_regions.py -n 'transposase' finialized_regions.txt ../MosaicPlasmids/ncbi_plasmids.gbff ../MosaicPlasmids/Transposase_filtered_table.txt Mosaic_fragment_transposases.tsv`
+9) Plot mosaic fragment abundance with `python clusterAbundance.py -f Mosaic_fragment_abundance.png mosaic_fragment_abundance_full_length.txt final_mosaic_fragments.fna Mosaic_fragment_transposases.tsv Mosaic_fragment_resistance.tsv`. Adjust bin size as necessary, use -h for more information.
 
-10) Identify fragments with overlapping antibiotic resistance genes with `python genes_touching_regions.py -n 'antibiotic resistance' finialized_regions.txt ../MosaicPlasmids/ncbi_plasmids.gbff ../MosaicPlasmids/Resistance_filtered_table.txt Mosaic_fragment_resistance.tsv`
-
-11) Plot mosaic fragment abundance with `python clusterAbundance.py -f Mosaic_fragment_abundance.png mosaic_fragment_abundance.txt final_mosaic_fragments.fna Mosaic_fragment_transposases.tsv Mosaic_fragment_resistance.tsv`. Adjust bin size as necessary, use -h for more information.
-
-12) Plot mosaic fragment genera count histogramm with the command `python /work/mpesesky/bin/fragment_genus_hist.py -b 24 -t 14 -o mosaic_frag_Genus_hist.png mosaic_fragment_abundance.txt ../MosaicPlasmids/organisms.txt -c MosaicFragmentAbundaceTable.tsv`
+10) Plot mosaic fragment genera count histogramm with the command `python /work/mpesesky/bin/fragment_genus_hist.py -b 24 -t 14 -o mosaic_frag_Genus_hist.png mosaic_fragment_abundance_full_length.txt ../MosaicPlasmids/organisms.txt -c MosaicFragmentAbundaceTable.tsv`
 
 

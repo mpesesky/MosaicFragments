@@ -131,7 +131,7 @@ def cleanup(regions):
     mod = True
     while mod:
         mod = False
-        print(len(existingRegions))
+        print("Current mosaic fragment count: {}".format(len(existingRegions)))
         newList = []
         while len(existingRegions) > 1:
             reg = existingRegions.pop()
@@ -240,10 +240,14 @@ def evaluate_regions(regions, blastTable, minLength, keepSingles=False):
         tmpRegion = Region(qparts['uid'], qparts['start'], qparts['stop'], minLength)
         qRegion = check_if_none(find_matching_region(tmpRegion, regions[qparts['uid']]), "qRegion", row)
 
-        subject = check_if_none(newName.match(row['sseqid']), "subject", row)
-        sparts = subject.groupdict()
-        tmpRegion = Region(sparts['uid'], sparts['start'], sparts['stop'], minLength)
-        sRegion = check_if_none(find_matching_region(tmpRegion, regions[sparts['uid']]), "subject", row)
+        subject = newName.match(row['sseqid'])
+        if subject is not None:
+            sparts = subject.groupdict()
+            tmpRegion = Region(sparts['uid'], sparts['start'], sparts['stop'], minLength)
+            sRegion = check_if_none(find_matching_region(tmpRegion, regions[sparts['uid']]), "subject", row)
+        else:
+            tmpRegion = Region(row['sseqid'], row['sstart'], row['send'], minLength)
+            sRegion = check_if_none(find_matching_region(tmpRegion, regions[row['sseqid']]), "subject", row)
 
         keeper, tosser = decide_regions(qRegion, sRegion)
 
@@ -265,7 +269,7 @@ def evaluate_regions(regions, blastTable, minLength, keepSingles=False):
             potentialToss = find_matching_region(keeper, dumpRegions[keeper.uid])
             if potentialToss is not None:
                 continue
-        print(i)
+#        print(i)
         if keeper.uid in newRegions:
             oldKeeper = find_matching_region(keeper, newRegions[keeper.uid])
             if oldKeeper is not None:
@@ -303,7 +307,7 @@ def flatten(dictOfLists):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Make a histogram of region occurances")
+    parser = argparse.ArgumentParser(description="Make a table of region occurances")
 
     parser.add_argument("BLAST", help="BLAST results input file")
     parser.add_argument("-t", "--total_nuc", action='store_true', help="Chart total nucleotides, not number of segments")

@@ -15,8 +15,8 @@ def col_add(transposase, Abres):
         return "Neither"
 
 def add_genes(valueTable, transTable, abresTable):
-    geneTable = pd.merge(transTable[['query', 'transposase']], abresTable[['query', 'Abres']], on='query')
-    geneTable['Associated Genes'] = geneTable.apply(lambda x: col_add(x.transposase, x.Abres), axis=1)
+    geneTable = pd.merge(transTable[['query', 'transposase']], abresTable[['query', 'antibiotic resistance']], on='query')
+    geneTable['Associated Genes'] = geneTable.apply(lambda x: col_add(x.transposase, x['antibiotic resistance']), axis=1)
 
     return pd.merge(valueTable, geneTable, how='left', left_on='qseqid', right_on='query')
 
