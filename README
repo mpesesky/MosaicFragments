@@ -1,3 +1,5 @@
+<a href="https://zenodo.org/badge/latestdoi/107728229"><img src="https://zenodo.org/badge/107728229.svg" alt="DOI"></a>
+
 Steps used to identify, and determne the abundance of, mosaic fragments.
 
 1) Download, concatenate, and BLAST plasmids and filter the BLAST output file (steps 1-4a of the 'Identify mosaic plasmids' section of MosaicPlasmids/README).
