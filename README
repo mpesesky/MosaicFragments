@@ -22,6 +22,6 @@ Steps used to identify, and determne the abundance of, mosaic fragments.
 
 9) Plot mosaic fragment abundance with `python clusterAbundance.py -f Mosaic_fragment_abundance.png mosaic_fragment_abundance_full_length.txt final_mosaic_fragments.fna Mosaic_fragment_transposases.tsv Mosaic_fragment_resistance.tsv`. Adjust bin size as necessary, use -h for more information.
 
-10) Plot mosaic fragment genera count histogramm with the command `python /work/mpesesky/bin/fragment_genus_hist.py -b 24 -t 14 -o mosaic_frag_Genus_hist.png mosaic_fragment_abundance_full_length.txt ../MosaicPlasmids/organisms.txt -c MosaicFragmentAbundaceTable.tsv`
+10) Plot mosaic fragment genera count histogramm with the command `python fragment_genus_hist.py -b 24 -t 14 -o mosaic_frag_Genus_hist.png mosaic_fragment_abundance_full_length.txt ../MosaicPlasmids/organisms.txt -c MosaicFragmentAbundaceTable.tsv`
 
 

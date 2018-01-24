@@ -33,9 +33,11 @@ def plot_hist(outdf, binBoundaries, ax, outfile, top):
     genusGroups = outdf.groupby('qseqid').genus.nunique()
 #    genusGroups += 1
     genusGroups.plot.hist(bins=binBoundaries, ax=ax, color='c')
-    plt.tight_layout()
     plt.gca().set_yscale("log")
     plt.ylim(ymin=0)
+    plt.ylabel("Number of Fragments")
+    plt.xlabel("Unique Genera")
+    plt.tight_layout()
     plt.savefig(outfile)
     return genusGroups.nlargest(top)
 
@@ -69,9 +71,11 @@ if __name__ == "__main__":
     if args.csv is not None:
         df.to_csv(args.csv, sep="\t")
 
+
+
     fig, ax = plt.subplots(nrows=1, ncols=1)
 
     topX = plot_hist(df, bins, ax, args.output, args.top)
-    ax.set_xlabel("Number of Fragments")
+
 
     print(topX)
