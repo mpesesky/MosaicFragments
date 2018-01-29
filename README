@@ -14,7 +14,7 @@ Steps used to identify, and determne the abundance of, mosaic fragments.
 
 5) BLAST these regions against the initial plasmids with the command `blastn -query final_mosaic_fragments.fna -subject ../MosaicPlasmids/ncbi_plasmid.fna -outfmt 6 -out mosaic_fragment_abundance.txt -perc_identity 100`
 
-6) Filter the BLAST results for full length matches using the command `python blast_filtering.py -s final_mosaic_fragments.fna -c 100 mosaic_fragment_abundance.txt > mosaic_fragment_abundance_full_length.txt
+6) Filter the BLAST results for full length matches using the command `python blast_filtering.py -s final_mosaic_fragments.fna -c 100 mosaic_fragment_abundance.txt > mosaic_fragment_abundance_full_length.txt`
 
 7) Identify fragments with overlapping transposases with `python genes_touching_regions.py -n 'transposase' mosaic_fragments_final.txt ../MosaicPlasmids/ncbi_plasmid.gbff ../MosaicPlasmids/Transposase_filtered_table.txt Mosaic_fragment_transposases.tsv`
 

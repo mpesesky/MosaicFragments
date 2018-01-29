@@ -1,6 +1,8 @@
 import pandas as pd
 import Fasta_one_line as fol
 import argparse
+import matplotlib
+matplotlib.use('agg')
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -78,6 +80,7 @@ n, usedbins, patches = ax[0].hist(geneAddedDF['Occurrences'], bins=binBoundaries
 
 
 data = []
+print(geneAddedDF['Occurrences'].nlargest(10))
 dataMax = geneAddedDF['Occurrences'].max()
 groups = list(set(geneAddedDF['Associated Genes']))
 
@@ -105,7 +108,7 @@ ax[1].boxplot(data, labels=groups, boxprops=dict(color='m'),
 
 ax[0].set_ylabel("Number of fragments")
 ax[0].set_xlabel("Number of occurances")
-ax[0].set_yscale("symlog")
+ax[0].set_yscale("log")
 ax[0].set_xticks(usedbins)
 for label in ax[0].xaxis.get_ticklabels()[::2]:
     label.set_visible(False)
