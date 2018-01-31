@@ -18,7 +18,7 @@ def add_genus(blastdf, orgDict):
     blastdf = blastdf[blastdf.qseqid != 'qseqid']
     blastdf['slocus'] = blastdf['sseqid'].map(name_to_locus)
     blastdf['genus'] = blastdf['slocus'].map(orgDict)
-    return blastdf
+    return blastdf.dropna()
 
 def import_orgs(orgfile):
     orgDict = {}

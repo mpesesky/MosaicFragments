@@ -24,4 +24,4 @@ Steps used to identify, and determne the abundance of, mosaic fragments.
 
 10) Plot mosaic fragment genera count histogramm with the command `python fragment_genus_hist.py -b 24 -t 14 -o mosaic_frag_Genus_hist.png mosaic_fragment_abundance_full_length.txt ../MosaicPlasmids/organisms.txt -c MosaicFragmentAbundaceTable.tsv`
 
-
+11) Find context for common genes with the command `python surrounding_gene_info.py -o surrounding_functions.txt mosaic_fragment_abundance_full_length.txt ../MosaicPlasmids/ncbi_plasmids.gbff`
