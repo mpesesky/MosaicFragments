@@ -12,6 +12,6 @@ args = parser.parse_args()
 para = pd.read_table(args.Para, sep="\t", index_col=0)
 mosaic = pd.read_table(args.Mosaic, sep="\t", index_col=0)
 
-combo = para.merge(mosaic, how='left', left_on='protein_id', right_on='geneID')
+combo = para.merge(mosaic, how='inner', left_on='protein_id', right_on='geneID')
 combo.fillna("None")
 combo.to_csv(args.Outtable, sep="\t")
